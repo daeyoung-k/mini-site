@@ -2,9 +2,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("io.github.oshai:kotlin-logging-jvm:6.0.3")
 
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")   // oauth2
     implementation("org.springframework.boot:spring-boot-starter-security")     // spring security
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")                           // jwt
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")                             // jwt

@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service
 class Sign(
     private val tokenProvider: TokenProvider
 ){
-
     fun signIn(signIn: SignIn): String {
-        println(tokenProvider.createToken(signIn.name!!))
-        return "token"
+        val token = tokenProvider.createToken(signIn.name!!)
+        return token
     }
 }

@@ -1,6 +1,6 @@
 package com.auth.service
 
-import com.nimbusds.jose.util.StandardCharset
+//import com.nimbusds.jose.util.StandardCharset
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -15,37 +15,33 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-@PropertySource("classpath:jwt.yml")
+const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 24
+
 @Service
 class TokenProvider(
-    @Value("\${secret-key}")
-    private val secretKey: String,
-    @Value("\${expiration-hours}")
-    private val expirationHours: Long,
-    @Value("\${issuer}")
-    private val issuer: String,
+//    @Value("\${jwt.secret-key}")
+//    private val secretKey: String
 
 ) {
-    val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharset.UTF_8))
-    fun createToken(userSpec: String): String {
-        val token = Jwts.builder()
-            .signWith(key)
-            .issuer(issuer)
-            .issuedAt(Timestamp.valueOf(LocalDateTime.now()))
-            .expiration(Date.from(Instant.now().plus(expirationHours, ChronoUnit.HOURS)))
-            .subject(userSpec)
-            .compact()
-        return token
-    }
-
-    fun decodeJwt(
-        jwtToken: String,
-        ): Claims {
-        return Jwts.parser()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(jwtToken)
-            .body
-    }
+//    val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharset.UTF_8))
+//    fun createToken(userSpec: String): String {
+//        val token = Jwts.builder()
+//            .signWith(key)
+//            .issuedAt(Timestamp.valueOf(LocalDateTime.now()))
+//            .expiration(Date.from(Instant.now().plus(EXPIRATION_MILLISECONDS, ChronoUnit.HOURS)))
+//            .subject(userSpec)
+//            .compact()
+//        return token
+//    }
+//
+//    fun decodeJwt(
+//        jwtToken: String,
+//        ): Claims {
+//        return Jwts.parser()
+//            .setSigningKey(key)
+//            .build()
+//            .parseClaimsJws(jwtToken)
+//            .body
+//    }
 
 }

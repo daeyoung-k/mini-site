@@ -2,7 +2,6 @@ package com.auth.controller
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
-import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.*
 
 private val logger = KotlinLogging.logger {}
@@ -32,13 +31,6 @@ class TodoList {
         return todosList
     }
 
-    @GetMapping("/csrf")
-    fun getCsrf(
-        request: HttpServletRequest
-    ): CsrfToken {
-        logger.info { request }
-        return request.getAttribute(CsrfToken::class.java.name) as CsrfToken
-    }
 }
 
 

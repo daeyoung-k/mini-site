@@ -1,16 +1,36 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
 logging:
   level:
     root: info
+    org:
+      hibernate:
+        SQL: debug
 
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testasd
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-#  security:
-#    user:
-#      name: kane
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/auth?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 1234
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        highlight_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+jwt:
+  secret-key: 1a11e4ff6f338b5131fbdfcc42348daaa4575ba713f64c35a414cce521ae0ba345b17754e26583de69411234044f18a3e9d8a23c691d5f0226f9f8399e97ab15

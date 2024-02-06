@@ -1,3 +1,18 @@
+### 회원가입
+POST http://localhost:8080/api/member/sign-up
+Content-Type: application/json
 
-GET http://localhost:8080/hello
-Authorization: Dev
+{
+"email": "eodud4976@naver.com",
+"nickName": "kane",
+"password": "q1w2e3r4!"
+}
+
+### 로그인
+POST http://localhost:8080/api/member/login
+Content-Type: application/json
+
+{
+"email": "eodud4976@naver.com",
+"password": "q1w2e3r4!"
+}

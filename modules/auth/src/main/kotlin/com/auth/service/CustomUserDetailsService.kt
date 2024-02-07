@@ -30,7 +30,6 @@ class CustomUserDetailsService(
             passwordEncoder.encode(member.password),
             member.roles!!.map { SimpleGrantedAuthority("ROLE_${it.role}") }
         )
-        logger.info { "user: $user"}
         return user
 
     }

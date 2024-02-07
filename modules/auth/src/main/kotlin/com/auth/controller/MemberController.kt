@@ -30,4 +30,9 @@ class MemberController(
         val tokenInfo = memberService.login(memberLoginDtoRequest)
         return BaseResponse(data = tokenInfo)
     }
+
+    @PostMapping("/token-info")
+    fun tokenInfo(@RequestBody token: String): String {
+        return "token"
+    }
 }

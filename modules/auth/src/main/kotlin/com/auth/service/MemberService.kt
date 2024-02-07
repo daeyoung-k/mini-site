@@ -65,9 +65,10 @@ class MemberService(
         if (!isMatched) {
             throw BadCredentialsException("비밀번호가 일치하지 않습니다.")
         }
-
+        logger.info { "member role: ${member.roles!!.map { "ROLE_${it.role}" }}" }
         val authenticationToken = UsernamePasswordAuthenticationToken(member.email, member.password)
-        val auth = authenticationManagerBuilder.getObject().authenticate(authenticationToken)
-        return jwtTokenProvider.createToken(auth)
+        logger.info { "authenticationToken : $authenticationToken" }
+//        val auth = authenticationManagerBuilder.getObject().authenticate(authenticationToken)
+        return jwtTokenProvider.createToken(member)
     }
 }

@@ -31,6 +31,8 @@ spring:
         highlight_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+  jackson:
+    time-zone: Asia/Seoul
 
 jwt:
   secret-key: 1a11e4ff6f338b5131fbdfcc42348daaa4575ba713f64c35a414cce521ae0ba345b17754e26583de69411234044f18a3e9d8a23c691d5f0226f9f8399e97ab15

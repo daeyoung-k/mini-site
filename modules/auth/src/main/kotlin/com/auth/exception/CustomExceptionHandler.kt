@@ -3,6 +3,7 @@ package com.auth.exception
 import com.common.dto.BaseResponse
 import com.common.exception.InvalidInputException
 import com.common.status.ResultCode
+import io.jsonwebtoken.security.SignatureException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
@@ -57,6 +58,15 @@ class CustomExceptionHandler {
                 ResultCode.ERROR.name,
                 ex.message ?: ResultCode.ERROR.msg,
             ), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(SignatureException::class)
+    protected fun signatureException(ex: SignatureException): ResponseEntity<BaseResponse<String>> {
+        return ResponseEntity(
+            BaseResponse(
+                ResultCode.ERROR.name,
+                ex.message ?: ResultCode.ERROR.msg,
+            ), HttpStatus.UNAUTHORIZED)
     }
 
 }

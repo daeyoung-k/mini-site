@@ -2,26 +2,26 @@ package com.auth.authority
 
 import com.auth.dto.TokenInfo
 import com.auth.entity.Member
+import com.auth.repository.MemberRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.security.SignatureException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Date
 
-const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 5
+const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 30
 
 private val logger = KotlinLogging.logger {}
 
 @Component
-class JwtTokenProvider {
+class JwtTokenProvider(
+    private val memberRepository: MemberRepository
+) {
     @Value("\${jwt.secret-key}")
     lateinit var secretKey: String
 
@@ -50,20 +50,40 @@ class JwtTokenProvider {
     /**
      * 토큰 정보 추출
      */
-    fun getAuthentication(token: String): String {
+    fun getAuthentication(token: String): Authentication {
+        val claims: Claims = validateToken(token) ?: throw SecurityException("토큰이 유효하지 않습니다.")
+        val member: Member = memberRepository.findByEmail(claims.subject) ?: throw SecurityException("회원정보가 없습니다.")
 
-        val claims: Claims = getClaims(token)
-
-//            val auth = claims["auth"] ?: throw SignatureException("잘못된 토큰입니다.")
-
-        logger.info { "claims : $claims" }
-        logger.info { "date : ${Date()}" }
-
-        return "string"
-
-
+        val authentication: Authentication = UsernamePasswordAuthenticationToken(
+            member.email,
+            "",
+            claims["auth", List::class.java].map { SimpleGrantedAuthority(it as String) }
+        )
+        return authentication
     }
 
+    /**
+     * 토큰 검증 */
+    fun validateToken(token: String): Claims? {
+        try {
+            return getClaims(token)
+        } catch (e: Exception) {
+            when (e) {
+                is SecurityException -> {}  // Invalid JWT Token
+                is MalformedJwtException -> {}  // Invalid JWT Token
+                is ExpiredJwtException -> {}    // Expired JWT Token
+                is UnsupportedJwtException -> {}
+                is IllegalArgumentException -> {}
+                else -> {}  // else
+            }
+            logger.info { "Token Error: $e.message" }
+            return null
+        }
+    }
+
+    /**
+     * 토큰 decode
+     */
     private fun getClaims(token: String): Claims =
         Jwts.parser()
             .verifyWith(key)

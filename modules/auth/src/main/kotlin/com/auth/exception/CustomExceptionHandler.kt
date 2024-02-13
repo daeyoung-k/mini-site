@@ -3,7 +3,11 @@ package com.auth.exception
 import com.common.dto.BaseResponse
 import com.common.exception.InvalidInputException
 import com.common.status.ResultCode
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.SignatureException
+import jakarta.servlet.ServletException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
@@ -62,6 +66,24 @@ class CustomExceptionHandler {
 
     @ExceptionHandler(SignatureException::class)
     protected fun signatureException(ex: SignatureException): ResponseEntity<BaseResponse<String>> {
+        return ResponseEntity(
+            BaseResponse(
+                ResultCode.ERROR.name,
+                ex.message ?: ResultCode.ERROR.msg,
+            ), HttpStatus.UNAUTHORIZED)
+    }
+
+    @ExceptionHandler(ServletException::class)
+    protected fun servletException(ex: ServletException): ResponseEntity<BaseResponse<String>> {
+        return ResponseEntity(
+            BaseResponse(
+                ResultCode.ERROR.name,
+                ex.message ?: ResultCode.ERROR.msg,
+            ), HttpStatus.UNAUTHORIZED)
+    }
+
+    @ExceptionHandler(SecurityException::class, MalformedJwtException::class, ExpiredJwtException::class, UnsupportedJwtException::class, IllegalArgumentException::class)
+    protected fun tokenValidateException(ex: Exception): ResponseEntity<BaseResponse<String>> {
         return ResponseEntity(
             BaseResponse(
                 ResultCode.ERROR.name,

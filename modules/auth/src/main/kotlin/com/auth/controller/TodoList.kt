@@ -1,7 +1,6 @@
 package com.auth.controller
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.*
 
 private val logger = KotlinLogging.logger {}

@@ -17,10 +17,13 @@ import io.kotest.extensions.spring.SpringTestExtension
 import io.kotest.extensions.spring.SpringTestLifecycleMode
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import jakarta.transaction.Transactional
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.transaction.annotation.Propagation
 
 private val logger = KotlinLogging.logger {}
@@ -57,18 +60,18 @@ class TokenProviderTest(
 
     describe("토큰 정보 추출") {
         context("정상적인 토큰이 들어왔을때") {
-            val token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlb2R1ZDQ5NzZAbmF2ZXIuY29tIiwiaWF0IjoxNzA3MjgzODUwLCJleHAiOjE3MDcyODQxNTB9.YUlub7UtRRbHDpHp-SUVZfzSGwe7j4wchtbFUZK6sTG5LIfr0uE8ZIGRCiqWUz5FZDdfvhrX3sSigMeLOTjXIA"
+            val token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlb2R1ZDQ5NzZAbmF2ZXIuY29tIiwiYXV0aCI6WyJST0xFX01FTUJFUiJdLCJpYXQiOjE3MDc4MDg2MTAsImV4cCI6MTcwNzgxMDQxMH0.ORs1Ew1qearxZ1I4sDTdSagNszRNGdW0FRfqZND6m1sGSaGxmZKwGwO8D0ilFQDbc9tsmmRTO2wwW1UIoBOBug"
 
             it("정상적으로 토큰 정보를 추출한다") {
-                val result: String = jwtTokenProvider.getAuthentication(token)
-                result shouldBe "string"
+                val result: Authentication = jwtTokenProvider.getAuthentication(token)
+                result.shouldBeInstanceOf<Authentication>()
             }
         }
         context("비정상적인 토큰이 들어왔을때") {
             val token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlb2R1ZDQ5NzZAbmF2ZXIuY29tIiwiYXV0aCI6IlJPTEVfTUSIiwiaWF0IjoxNzA3MjY3MTk4LCJleHAiOjE3MDczNTM1OTh9.AoNKL0gO0e47VsSwO6pPWWUzXHvrjvGxUA2ZOyNfP5d9zpMGJalBURSAO4uu85Z599NmSjGfbcbT1hyrFb6Tiw"
 
             it("예외를 발생시킨다") {
-                shouldThrow<SignatureException> {
+                shouldThrow<SecurityException> {
                     jwtTokenProvider.getAuthentication(token)
                 }
             }

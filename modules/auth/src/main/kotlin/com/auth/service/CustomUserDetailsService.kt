@@ -2,7 +2,6 @@ package com.auth.service
 
 import com.auth.entity.Member
 import com.auth.repository.MemberRepository
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
-private val logger = KotlinLogging.logger {}
 
 @Service
 class CustomUserDetailsService(

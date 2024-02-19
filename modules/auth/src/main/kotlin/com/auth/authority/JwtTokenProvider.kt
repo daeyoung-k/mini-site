@@ -11,17 +11,18 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 import java.util.Date
 
 const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 30
 
-private val logger = KotlinLogging.logger {}
-
 @Component
 class JwtTokenProvider(
     private val memberRepository: MemberRepository
 ) {
+    private val logger = KotlinLogging.logger {}
+
     @Value("\${jwt.secret-key}")
     lateinit var secretKey: String
 
@@ -51,8 +52,8 @@ class JwtTokenProvider(
      * 토큰 정보 추출
      */
     fun getAuthentication(token: String): Authentication {
-        val claims: Claims = validateToken(token) ?: throw SecurityException("토큰이 유효하지 않습니다.")
-        val member: Member = memberRepository.findByEmail(claims.subject) ?: throw SecurityException("회원정보가 없습니다.")
+        val claims: Claims = getClaims(token)
+        val member: Member = memberRepository.findByEmail(claims.subject) ?: throw UsernameNotFoundException("회원정보가 없습니다.")
 
         val authentication: Authentication = UsernamePasswordAuthenticationToken(
             member.email,
@@ -60,25 +61,6 @@ class JwtTokenProvider(
             claims["auth", List::class.java].map { SimpleGrantedAuthority(it as String) }
         )
         return authentication
-    }
-
-    /**
-     * 토큰 검증 */
-    fun validateToken(token: String): Claims? {
-        try {
-            return getClaims(token)
-        } catch (e: Exception) {
-            when (e) {
-                is SecurityException -> {}  // Invalid JWT Token
-                is MalformedJwtException -> {}  // Invalid JWT Token
-                is ExpiredJwtException -> {}    // Expired JWT Token
-                is UnsupportedJwtException -> {}
-                is IllegalArgumentException -> {}
-                else -> {}  // else
-            }
-            logger.info { "Token Error: $e.message" }
-            return null
-        }
     }
 
     /**

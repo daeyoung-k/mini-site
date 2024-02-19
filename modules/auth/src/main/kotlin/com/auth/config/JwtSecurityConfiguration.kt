@@ -24,13 +24,13 @@ class JwtSecurityConfiguration(
             .httpBasic { it.disable() }
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .anonymous{ it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers(
                     "/api/member/sign-up",
                     "/api/member/login"
-                    ).anonymous()
+                    ).permitAll()
                     .requestMatchers("/api/**").hasAnyRole("MEMBER", "ADMIN")
-//                    .anyRequest().permitAll()
             }
             .addFilterBefore(
                 JwtSecurityFilter(jwtTokenProvider),

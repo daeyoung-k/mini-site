@@ -3,7 +3,7 @@ POST http://localhost:8080/api/member/sign-up
 Content-Type: application/json
 
 {
-"email": "eodud4976@naver.com",
+"email": "eodud4976@naver.com111",
 "nickName": "kane",
 "password": "q1w2e3r4!"
 }
@@ -13,6 +13,6 @@ POST http://localhost:8080/api/member/login
 Content-Type: application/json
 
 {
-"email": "eodud4976@naver.com",
+"email": "eodud4976@naver.com111",
 "password": "q1w2e3r4!"
 }

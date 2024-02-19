@@ -18,16 +18,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
-private val logger = KotlinLogging.logger {}
-
 @Transactional
 @Service
 class MemberService(
     private val memberRepository: MemberRepository,
     private val memberRoleRepository: MemberRoleRepository,
-    private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
+    private val logger = KotlinLogging.logger {}
+
     /**
      * 회원가입
      */
@@ -68,7 +67,6 @@ class MemberService(
         logger.info { "member role: ${member.roles!!.map { "ROLE_${it.role}" }}" }
         val authenticationToken = UsernamePasswordAuthenticationToken(member.email, member.password)
         logger.info { "authenticationToken : $authenticationToken" }
-//        val auth = authenticationManagerBuilder.getObject().authenticate(authenticationToken)
         return jwtTokenProvider.createToken(member)
     }
 }

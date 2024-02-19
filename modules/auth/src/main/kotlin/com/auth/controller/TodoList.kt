@@ -3,11 +3,10 @@ package com.auth.controller
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.web.bind.annotation.*
 
-private val logger = KotlinLogging.logger {}
-
 @RestController
 @RequestMapping("/api")
 class TodoList {
+    private val logger = KotlinLogging.logger {}
 
     val todosList: MutableList<Todo> = mutableListOf(Todo("user1", "todo1"), Todo("user2", "todo2"))
 

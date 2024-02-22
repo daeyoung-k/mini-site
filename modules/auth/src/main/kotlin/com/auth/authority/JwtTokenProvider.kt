@@ -31,8 +31,8 @@ class JwtTokenProvider(
     /**
      * 토큰 생성
      */
-    fun createToken(member: Member): TokenInfo {
-        val authority: List<String> = member.roles!!.map { "ROLE_${it.role}" }
+    fun createToken(member: Member): String {
+        val authority: List<String>? = member.roles?.map { "ROLE_${it.role}" }
 
         val now = Date()
         val accessException = Date(now.time + EXPIRATION_MILLISECONDS)
@@ -44,8 +44,7 @@ class JwtTokenProvider(
             .expiration(accessException)
             .signWith(key)
             .compact()
-
-        return TokenInfo("Bearer", accessToken)
+        return "Bearer $accessToken"
     }
 
     /**

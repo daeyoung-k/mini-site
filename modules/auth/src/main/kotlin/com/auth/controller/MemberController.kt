@@ -5,6 +5,7 @@ import com.auth.dto.MemberLoginDtoRequest
 import com.auth.dto.TokenInfo
 import com.auth.service.MemberService
 import com.common.dto.BaseResponse
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -25,14 +26,17 @@ class MemberController(
         return BaseResponse(message = resultMsg)
     }
 
+    /**
+     * 로그인
+     */
     @PostMapping("/login")
-    fun login(@RequestBody @Valid memberLoginDtoRequest: MemberLoginDtoRequest): BaseResponse<TokenInfo> {
-        val tokenInfo = memberService.login(memberLoginDtoRequest)
-        return BaseResponse(data = tokenInfo)
+    fun login(
+        response: HttpServletResponse,
+        @RequestBody @Valid memberLoginDtoRequest: MemberLoginDtoRequest
+    ): BaseResponse<String> {
+        val token = memberService.login(memberLoginDtoRequest)
+        response.setHeader("Authorization", token)
+        return BaseResponse()
     }
 
-    @PostMapping("/token-info")
-    fun tokenInfo(@RequestBody token: String): String {
-        return "token"
-    }
 }

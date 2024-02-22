@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.util.StringUtils
 import org.springframework.web.filter.GenericFilterBean
 
@@ -50,6 +51,7 @@ class JwtSecurityFilter(
                 is UnsupportedJwtException -> {setErrorResponse(res as HttpServletResponse, ErrorCode.UNSUPPORTED_TOKEN)}
                 is IllegalArgumentException -> {setErrorResponse(res as HttpServletResponse, ErrorCode.INVALID_TOKEN)}
                 is JwtException -> {setErrorResponse(res as HttpServletResponse, ErrorCode.INVALID_TOKEN)}
+                is UsernameNotFoundException -> {setErrorResponse(res as HttpServletResponse, ErrorCode.USER_NOT_FOUND)}
                 else -> {setErrorResponse(res as HttpServletResponse, ErrorCode.INVALID_TOKEN)}
             }
         }

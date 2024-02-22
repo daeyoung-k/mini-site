@@ -25,7 +25,6 @@ class MemberService(
     private val memberRoleRepository: MemberRoleRepository,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
-    private val logger = KotlinLogging.logger {}
 
     /**
      * 회원가입
@@ -53,7 +52,7 @@ class MemberService(
     /**
      * 로그인
      */
-    fun login(memberLoginDtoRequest: MemberLoginDtoRequest): TokenInfo {
+    fun login(memberLoginDtoRequest: MemberLoginDtoRequest): String {
 
         val encoder = BCryptPasswordEncoder()
 
@@ -64,9 +63,7 @@ class MemberService(
         if (!isMatched) {
             throw BadCredentialsException("비밀번호가 일치하지 않습니다.")
         }
-        logger.info { "member role: ${member.roles!!.map { "ROLE_${it.role}" }}" }
-        val authenticationToken = UsernamePasswordAuthenticationToken(member.email, member.password)
-        logger.info { "authenticationToken : $authenticationToken" }
+
         return jwtTokenProvider.createToken(member)
     }
 }

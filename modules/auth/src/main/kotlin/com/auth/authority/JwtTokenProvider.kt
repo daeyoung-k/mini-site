@@ -1,6 +1,5 @@
 package com.auth.authority
 
-import com.auth.dto.TokenInfo
 import com.auth.entity.Member
 import com.auth.repository.MemberRepository
 import io.github.oshai.kotlinlogging.KotlinLogging

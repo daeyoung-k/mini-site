@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
+import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 
 
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Service
 class CustomUserDetailsService(
     private val memberRepository: MemberRepository,
     private val passwordEncoder: PasswordEncoder,
-): UserDetailsService {
+): UserDetailsService{
     override fun loadUserByUsername(email: String): UserDetails =
         memberRepository.findByEmail(email)
             ?.let { createUserDetails(it) }

@@ -8,9 +8,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("io.github.oshai:kotlin-logging-jvm:6.0.3")
 
-//    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")   // oauth2
-    implementation("com.google.api-client:google-api-client:2.3.0")
-    implementation("com.google.api-client:google-api-client-jackson2:2.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-security")     // spring security
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")                           // jwt
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")                             // jwt

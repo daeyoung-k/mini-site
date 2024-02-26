@@ -40,6 +40,10 @@ spring:
           google:
             client-id: 387967054074-anlntlf3n5lgc44ctc8rjum3rihdm9i8.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: http://localhost:8080/oauth2/callback/google
+            scope:
+              - email
+              - profile
 
 jwt:
   secret-key: 1a11e4ff6f338b5131fbdfcc42348daaa4575ba713f64c35a414cce521ae0ba345b17754e26583de69411234044f18a3e9d8a23c691d5f0226f9f8399e97ab15

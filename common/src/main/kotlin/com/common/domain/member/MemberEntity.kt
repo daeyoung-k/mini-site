@@ -1,7 +1,7 @@
-package com.auth.entity
+package com.common.domain.member
 
-import com.auth.status.ProviderType
-import com.auth.status.ROLE
+import com.common.status.ProviderType
+import com.common.status.ROLE
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -21,15 +21,16 @@ class Member(
     @Column(nullable = false, length = 100)
     val password: String,
 
+    @Column(nullable = true)
+    @Enumerated(EnumType.STRING)
+    val provider: ProviderType? = null,
+
     @Column(nullable = false)
     val createAt: LocalDateTime? = LocalDateTime.now(),
 
     @Column(nullable = true)
     val updateAt: LocalDateTime? = null,
 
-    @Column(nullable = true)
-    @Enumerated(EnumType.STRING)
-    val provider: ProviderType? = null
 
 ) {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])

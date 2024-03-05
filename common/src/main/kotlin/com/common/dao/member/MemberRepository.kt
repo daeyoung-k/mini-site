@@ -1,8 +1,10 @@
-package com.auth.repository
+package com.common.dao.member
 
-import com.auth.entity.Member
-import com.auth.entity.MemberRole
+import com.common.domain.member.Member
+import com.common.domain.member.MemberRole
+import org.springframework.context.annotation.Bean
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
 interface MemberRepository: JpaRepository<Member, Long> {
     fun findByEmail(email: String): Member?

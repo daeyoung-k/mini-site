@@ -1,10 +1,10 @@
 package com.auth.dto
 
-import com.auth.entity.Member
+import com.common.domain.member.Member
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 
 
 data class MemberDtoRequest(
@@ -20,7 +20,7 @@ data class MemberDtoRequest(
     val password: String
 ) {
     fun toEntity(): Member {
-        val encoder = BCryptPasswordEncoder()
+        val encoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8()
         return Member(
             email = email,
             nickName = nickName,

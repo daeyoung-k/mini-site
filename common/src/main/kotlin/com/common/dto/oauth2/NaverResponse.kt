@@ -1,7 +1,11 @@
 package com.common.dto.oauth2
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Objects
+
 class NaverResponse(
-    private val attribute: MutableMap<String, Any>
+
+    @JsonProperty("response") val attribute: MutableMap<String, Objects>
 ): OAuth2Response{
     override fun getProvider(): String = "naver"
     override fun getProviderId(): String = attribute["id"].toString()

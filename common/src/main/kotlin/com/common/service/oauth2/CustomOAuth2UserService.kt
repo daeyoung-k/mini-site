@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CustomOAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -16,22 +17,29 @@ class CustomOAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User
         val oAuth2User: OAuth2User = delegate.loadUser(userRequest)
         println("oAuth2User: $oAuth2User")
         println("oAuth2User attributes: ${oAuth2User.attributes}")
+        println("oAuth2User attributes.javaClass: ${oAuth2User.attributes.javaClass}")
+        println("oAuth2User attributes.javaClass.name: ${oAuth2User.attributes.javaClass.name}")
         println("oAuth2User Name: ${oAuth2User.name}")
+        println("oAuth2User Name.javaClass: ${oAuth2User.name.javaClass}")
+        println("oAuth2User Name.javaClass.name: ${oAuth2User.name.javaClass.name}")
         println("oAuth2User attributes.response: ${oAuth2User.attributes["response"]}")
+        println("oAuth2User attributes: ${oAuth2User.attributes}")
 
         val provider = userRequest.clientRegistration.registrationId
 
         val oAuth2Response: OAuth2Response = when (provider) {
             "google" -> {
-                GoogleResponse(oAuth2User.attributes as MutableMap<String, Any>)
+                GoogleResponse(oAuth2User.attributes as MutableMap<String, Objects>)
             }
 
             "naver" -> {
-                NaverResponse(oAuth2User.name as MutableMap<String, Any>)
+                NaverResponse(oAuth2User.attributes["response"] as MutableMap<String, Objects>)
             }
 
             else -> return null
         }
+
+
 
         println("oAuth2Response: $oAuth2Response")
         println("oAuth2Response: ${oAuth2Response.getProvider()}")

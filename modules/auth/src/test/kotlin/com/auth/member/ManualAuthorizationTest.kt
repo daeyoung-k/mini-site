@@ -2,11 +2,11 @@ package com.auth.member
 
 import com.auth.authority.JwtTokenProvider
 import com.auth.dto.MemberDtoRequest
-import com.common.domain.member.Member
-import com.common.domain.member.MemberRole
-import com.common.dao.member.MemberRepository
-import com.common.dao.member.MemberRoleRepository
-import com.common.status.ROLE
+import com.auth.domain.Member
+import com.auth.domain.MemberRole
+import com.auth.repository.MemberRepository
+import com.auth.repository.MemberRoleRepository
+import com.auth.status.ROLE
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

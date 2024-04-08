@@ -1,4 +1,4 @@
-package com.common.status
+package com.auth.status
 
 enum class ROLE {
     ADMIN,

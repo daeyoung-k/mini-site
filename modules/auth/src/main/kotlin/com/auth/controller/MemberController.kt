@@ -1,7 +1,7 @@
 package com.auth.controller
 
 import com.auth.dto.MemberLoginDtoRequest
-import com.common.dao.member.MemberRepository
+import com.auth.repository.MemberRepository
 import com.common.dto.BaseResponse
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid

@@ -1,4 +1,4 @@
-package com.common.status
+package com.auth.status.jwt
 
 enum class ProviderType {
     GOOGLE,

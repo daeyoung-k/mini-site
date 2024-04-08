@@ -1,6 +1,6 @@
-package com.common.provider
+package com.auth.provider
 
-import com.common.dto.JwtToken
+import com.auth.dto.JwtTokenDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
@@ -40,7 +40,7 @@ class JwtProvider {
             .compact()
     }
 
-    fun createJwtToken(email: String, role: String): JwtToken {
+    fun createJwtToken(email: String, role: String): JwtTokenDto {
         val now = Date()
         val accessExpiration = Date(now.time + ACCESS_EXPIRATION)
         val refreshExpiration = Date(now.time + REFRESH_EXPIRATION)
@@ -62,7 +62,7 @@ class JwtProvider {
             .signWith(key)
             .compact()
 
-        return JwtToken(accessToken, refreshToken)
+        return JwtTokenDto(accessToken, refreshToken)
     }
 
     fun getClaims(token: String): Claims = Jwts.parser()

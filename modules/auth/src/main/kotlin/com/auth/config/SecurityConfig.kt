@@ -1,8 +1,7 @@
-package com.common.config
+package com.auth.config
 
 
-import com.common.dao.member.MemberRepository
-import com.common.service.oauth2.CustomOAuth2UserService
+import com.auth.service.oauth2.CustomOAuth2UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

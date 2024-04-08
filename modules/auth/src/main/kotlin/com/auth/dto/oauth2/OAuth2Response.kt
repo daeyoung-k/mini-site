@@ -1,4 +1,4 @@
-package com.common.dto.oauth2
+package com.auth.dto.oauth2
 
 interface OAuth2Response {
 

@@ -1,8 +1,12 @@
-package com.common.service.oauth2
+package com.auth.service.oauth2
 
-import com.common.dto.oauth2.GoogleResponse
-import com.common.dto.oauth2.NaverResponse
-import com.common.dto.oauth2.OAuth2Response
+import com.auth.domain.Member
+import com.auth.dto.oauth2.GoogleResponse
+import com.auth.dto.oauth2.KakaoResponse
+import com.auth.dto.oauth2.NaverResponse
+import com.auth.dto.oauth2.OAuth2Response
+import com.auth.repository.MemberRepository
+import com.auth.status.jwt.ProviderType
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
@@ -11,22 +15,15 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CustomOAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+class CustomOAuth2UserService(
+    private val memberRepository: MemberRepository
+): OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User? {
         val delegate = DefaultOAuth2UserService()
         val oAuth2User: OAuth2User = delegate.loadUser(userRequest)
-        println("oAuth2User: $oAuth2User")
-        println("oAuth2User attributes: ${oAuth2User.attributes}")
-        println("oAuth2User attributes.javaClass: ${oAuth2User.attributes.javaClass}")
-        println("oAuth2User attributes.javaClass.name: ${oAuth2User.attributes.javaClass.name}")
-        println("oAuth2User Name: ${oAuth2User.name}")
-        println("oAuth2User Name.javaClass: ${oAuth2User.name.javaClass}")
-        println("oAuth2User Name.javaClass.name: ${oAuth2User.name.javaClass.name}")
-        println("oAuth2User attributes.response: ${oAuth2User.attributes["response"]}")
-        println("oAuth2User attributes: ${oAuth2User.attributes}")
 
         val provider = userRequest.clientRegistration.registrationId
-
+//
         val oAuth2Response: OAuth2Response = when (provider) {
             "google" -> {
                 GoogleResponse(oAuth2User.attributes as MutableMap<String, Objects>)
@@ -36,10 +33,14 @@ class CustomOAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User
                 NaverResponse(oAuth2User.attributes["response"] as MutableMap<String, Objects>)
             }
 
+            "kakao" -> {
+                KakaoResponse(oAuth2User.attributes as MutableMap<String, Objects>)
+            }
+
             else -> return null
         }
 
-
+        println("oAuth2User.attributes: ${oAuth2User.attributes}")
 
         println("oAuth2Response: $oAuth2Response")
         println("oAuth2Response: ${oAuth2Response.getProvider()}")
@@ -47,12 +48,21 @@ class CustomOAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User
         println("oAuth2Response: ${oAuth2Response.getEmail()}")
         println("oAuth2Response: ${oAuth2Response.getName()}")
 
-        return null
-//
-//        val userName = "${oAuth2Response.getProvider()}${oAuth2Response.getProviderId()}"
-//
-//        var existData: UserEntity? = userRepository.findByUsername(userName)
-//
+        val user_email: String = oAuth2Response.getEmail()
+
+        var user_data: Member? = memberRepository.findByEmail(user_email)
+        println("user_data: $user_data")
+        println(oAuth2Response.getProvider() as ProviderType)
+        if (user_data == null) {
+            val member = Member(
+                email = user_email,
+                name = oAuth2Response.getName(),
+                provider = oAuth2Response.getProvider() as ProviderType,
+            )
+
+            println("member: $member")
+        }
+
 //        if (existData == null) {
 //            val userEntity = UserEntity(
 //                username = userName,
@@ -82,5 +92,6 @@ class CustomOAuth2UserService(): OAuth2UserService<OAuth2UserRequest, OAuth2User
 //            )
 //            return CustomOAuth2User(userDTO)
 //        }
+        return null
     }
 }

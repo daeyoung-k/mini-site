@@ -10,8 +10,3 @@ data class BaseResponse<T>(
 
 
 data class ErrorResponse(val code: Int, val message: String)
-
-data class JwtToken(
-    val accessToken: String,
-    val refreshToken: String,
-)

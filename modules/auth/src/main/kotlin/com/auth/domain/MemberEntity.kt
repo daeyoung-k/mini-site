@@ -1,7 +1,7 @@
-package com.common.domain.member
+package com.auth.domain
 
-import com.common.status.ProviderType
-import com.common.status.ROLE
+import com.auth.status.ROLE
+import com.auth.status.jwt.ProviderType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -15,11 +15,11 @@ class Member(
     @Column(unique = true, length = 100, updatable = false)
     val email: String,
 
-    @Column(nullable = true, length = 100)
-    val nickName: String?,
-
     @Column(nullable = false, length = 100)
-    val password: String,
+    val name: String,
+
+    @Column(nullable = true, length = 100)
+    val nickName: String? = null,
 
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
@@ -32,7 +32,7 @@ class Member(
     val updateAt: LocalDateTime? = null,
 
 
-) {
+    ) {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val roles: List<MemberRole>? = null
 }

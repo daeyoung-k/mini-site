@@ -1,6 +1,6 @@
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ test-local ]
 
 jobs:
   deploy:
@@ -16,14 +16,18 @@ jobs:
       - if: endsWith(github.base_ref, 'master')
         run: |
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-          echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
       - if: endsWith(github.base_ref, 'feature')
         run: |
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
-          echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
-
-      - name: Set env variables
+      - if: endsWith(github.base_ref, 'test-local')
         run: |
+          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+
+      - name: Set commit k8s repo msg & env variables
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          echo "COMMIT_MSG=Update from https://github.com/marketdesigners/auth-server/commit/$GITHUB_SHA" >> $GITHUB_ENV
           echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
           echo "DESTINATION_PARTNER=$ENVIRONMENT/partner-auth" >> $GITHUB_ENV
           echo "DESTINATION_COMMON=$ENVIRONMENT/common-auth" >> $GITHUB_ENV
@@ -42,16 +46,34 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Admin Build, tag and push image to Amazon ECR
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'admin') }}
         id: admin-build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPO: eks-admin-auth
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          ./gradlew clean :admin:buildNeeded --stacktrace --info -x test
+          docker build --build-arg ENVIRONMENT=$ENVIRONMENT -t $ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG ./admin
+          docker push $ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
-      - name: Output check
+      - name: Git config
         run: |
-          echo ${{ steps.admin-build-image.outputs.image }}
-          echo $steps.admin-build-image
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Check out k8 repo
+        uses: actions/checkout@v3
+        with:
+          repository: marketdesigners/k8
+          token: ${{ secrets.GTOKEN }}
+
+      - if: ${{ contains(github.event.pull_request.labels.*.name, 'admin') }}
+        run: sed -i -e 's@${{ steps.login-ecr.outputs.registry }}/eks-admin-auth:.*@${{ steps.customer-build-image.outputs.image }}@g' $DESTINATION_ADMIN/$ENVIRONMENT-resources.yaml
+
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "$COMMIT_MSG"
+          git push -f --set-upstream origin main

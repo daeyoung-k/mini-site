@@ -24,4 +24,4 @@ jobs:
           echo ${{ github.event.pull_request.labels.* }}
           echo ${{ github.event.pull_request.labels.*.name }}
           echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-          echo '라벨체크 확인 오케이12'
+          echo '라벨체크 확인 오케이'

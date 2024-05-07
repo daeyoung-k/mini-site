@@ -22,13 +22,13 @@ jobs:
         env:
           ENVIRONMENT: dev
           DESTINATION_CUSTOMER: dev/admin-auth
-        run: echo "$GITHUB_ENV"
+        run: echo $GITHUB_ENV
 
       - name: Check PR Labels
 #        env:
 #          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
-          echo "$ENVIRONMENT"
+          echo $ENVIRONMENT
 
 #        run: |
 #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

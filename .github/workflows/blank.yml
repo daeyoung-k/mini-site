@@ -3,15 +3,15 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-#      - uses: actions/checkout@v4
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v4
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
       - if: endsWith(github.base_ref, 'master')
         run: |
@@ -30,27 +30,24 @@ jobs:
           echo "DESTINATION_BATCH=$ENVIRONMENT/batch-auth" >> $GITHUB_ENV
           echo "DESTINATION_ADMIN=$ENVIRONMENT/admin-auth" >> $GITHUB_ENV
 
-  deploy:
-    needs: build
-    name: Deploy
-    runs-on: ubuntu-latest
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
 
-    steps:
-      - name: Check PR Labels
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Customer Build, tag and push image to Amazon ECR
+        id: customer-build-image
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPO: eks-admin-auth
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo $ENVIRONMENT
-          echo $DESTINATION_CUSTOMER
-          echo $DESTINATION_PARTNER
-          echo $DESTINATION_COMMON
-          echo $DESTINATION_BATCH
-          echo $DESTINATION_ADMIN
-          echo ${{ github.head_ref }}
-          echo ${{ github.ref }}
-          echo ${{ github.ref_name }}
-          echo $GITHUB_CONTEXT
-
-  #        run: |
-  #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-  #          echo ㅋㅌㅊㅋㅌㅊㅋㅌㅊㅋㅌ
+          echo $ECR_REGISTRY
+          echo $ECR_REPO
+          echo $IMAGE_TAG

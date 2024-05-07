@@ -13,11 +13,11 @@ jobs:
 #          java-version: '17'
 #          distribution: 'temurin'
 
-      - if: endsWith(github.head_ref, 'master')
+      - if: endsWith(github.base_ref, 'master')
         run: |
           echo "ENVIRONMENT=prod >> $GITHUB_ENV
           echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
-      - if: endsWith(github.head_ref, 'feature')
+      - if: endsWith(github.base_ref, 'feature')
         run: |
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
           echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
@@ -30,6 +30,12 @@ jobs:
           echo "DESTINATION_BATCH=$ENVIRONMENT/batch-auth" >> $GITHUB_ENV
           echo "DESTINATION_ADMIN=$ENVIRONMENT/admin-auth" >> $GITHUB_ENV
 
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Check PR Labels
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -45,6 +51,6 @@ jobs:
           echo ${{ github.ref_name }}
           echo $GITHUB_CONTEXT
 
-#        run: |
-#          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-#          echo ㅋㅌㅊㅋㅌㅊㅋㅌㅊㅋㅌ
+  #        run: |
+  #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+  #          echo ㅋㅌㅊㅋㅌㅊㅋㅌㅊㅋㅌ

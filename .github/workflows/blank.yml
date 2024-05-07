@@ -23,5 +23,3 @@ jobs:
           echo ${{ env.PR_LABEL_LIST }}
           echo ${{ env.PU_LABEL_LIST }}
           echo ${{ env.LABEL_LIST }}
-          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-          echo '라벨체크 확인 오케이'

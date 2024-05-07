@@ -40,6 +40,8 @@ jobs:
           echo $DESTINATION_COMMON
           echo $DESTINATION_BATCH
           echo $DESTINATION_ADMIN
+          echo ${{ github.head_ref }}
+          echo ${{ github.ref }}
 
 #        run: |
 #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

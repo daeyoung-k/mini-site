@@ -56,7 +56,7 @@ jobs:
           ./gradlew clean :admin:buildNeeded --stacktrace --info -x test
           docker build --build-arg ENVIRONMENT=$ENVIRONMENT -t $ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG ./admin
           docker push $ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+          echo "image=image: $ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Git config
         run: |
@@ -64,13 +64,13 @@ jobs:
           git config --global user.name "GitHub Actions"
 
       - name: Check out k8 repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: marketdesigners/k8
           token: ${{ secrets.GTOKEN }}
 
       - if: ${{ contains(github.event.pull_request.labels.*.name, 'admin') }}
-        run: sed -i -e 's@${{ steps.login-ecr.outputs.registry }}/eks-admin-auth:.*@${{ steps.customer-build-image.outputs.image }}@g' $DESTINATION_ADMIN/$ENVIRONMENT-resources.yaml
+        run: sed -i -e 's@image:.*@${{ steps.admin-build-image.outputs.image }}@g' $DESTINATION_ADMIN/$ENVIRONMENT-resources.yaml
 
       - name: Commit and push
         run: |

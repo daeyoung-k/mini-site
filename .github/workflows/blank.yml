@@ -24,15 +24,15 @@ jobs:
           DESTINATION_CUSTOMER: dev/admin-auth
         run: |
           echo $GITHUB_ENV
-          echo ENVIRONMENT
-          echo DESTINATION_CUSTOMER
+          echo $ENVIRONMENT
+          echo $DESTINATION_CUSTOMER
 
       - name: Check PR Labels
 #        env:
 #          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "ENVIRONMENT-test=test" >> $GITHUB_ENV
-          echo "$GITHUB_ENV"
+          echo $GITHUB_ENV
           printf( $GITHUB_ENV )
 
 #        run: |

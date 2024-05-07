@@ -16,11 +16,11 @@ jobs:
       - if: endsWith(github.head_ref, 'master')
         run: |
           echo "ENVIRONMENT=prod >> $GITHUB_ENV
-          echo "DESTINATION_CUSTOMER=prod/customer-auth" >> $GITHUB_ENV
+          echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
       - if: endsWith(github.head_ref, 'feature')
         run: |
-          echo "ENVIRONMENT=dev >> $GITHUB_ENV
-          echo "DESTINATION_CUSTOMER=dev/customer-auth" >> $GITHUB_ENV
+          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+          echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
 
       - name: Check PR Labels
 #        env:

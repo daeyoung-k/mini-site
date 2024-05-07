@@ -36,10 +36,10 @@ jobs:
         run: |
           echo $ENVIRONMENT
           echo $DESTINATION_CUSTOMER
-          echo DESTINATION_PARTNER
-          echo DESTINATION_COMMON
-          echo DESTINATION_BATCH
-          echo DESTINATION_ADMIN
+          echo $DESTINATION_PARTNER
+          echo $DESTINATION_COMMON
+          echo $DESTINATION_BATCH
+          echo $DESTINATION_ADMIN
 
 #        run: |
 #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

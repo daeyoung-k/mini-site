@@ -19,8 +19,10 @@ jobs:
         #if: contains(github.event.pull_request.labels.*.name, 'deploy')
         env:
           PR_LABEL_LIST: ${{ toJson(github.event.pull_request.labels.*.name) }}
+          PU_LABEL_LIST: ${{ toJson(github.event.push.labels.*.name) }}
         run: |
           echo ${{ env.PR_LABEL_LIST }}
+          echo ${{ env.PU_LABEL_LIST }}
           echo ${{ github.event.pull_request.labels.* }}
           echo ${{ github.event.pull_request.labels.*.name }}
           echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

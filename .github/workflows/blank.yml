@@ -22,13 +22,24 @@ jobs:
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
           echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
 
+      - name: Set env variables
+        run: |
+          echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
+          echo "DESTINATION_PARTNER=$ENVIRONMENT/partner-auth" >> $GITHUB_ENV
+          echo "DESTINATION_COMMON=$ENVIRONMENT/common-auth" >> $GITHUB_ENV
+          echo "DESTINATION_BATCH=$ENVIRONMENT/batch-auth" >> $GITHUB_ENV
+          echo "DESTINATION_ADMIN=$ENVIRONMENT/admin-auth" >> $GITHUB_ENV
+
       - name: Check PR Labels
 #        env:
 #          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo $ENVIRONMENT
           echo $DESTINATION_CUSTOMER
-          echo $GITHUB_ENV
+          echo DESTINATION_PARTNER
+          echo DESTINATION_COMMON
+          echo DESTINATION_BATCH
+          echo DESTINATION_ADMIN
 
 #        run: |
 #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

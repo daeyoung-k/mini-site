@@ -31,8 +31,8 @@ jobs:
           echo "DESTINATION_ADMIN=$ENVIRONMENT/admin-auth" >> $GITHUB_ENV
 
       - name: Check PR Labels
-#        env:
-#          GITHUB_CONTEXT: ${{ toJson(github) }}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo $ENVIRONMENT
           echo $DESTINATION_CUSTOMER

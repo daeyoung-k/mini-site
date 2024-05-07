@@ -22,8 +22,8 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
-          echo "$GITHUB_CONTEXT"
           echo "$GITHUB_ENV"
+          echo "$github.ref"
 
 #        run: |
 #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

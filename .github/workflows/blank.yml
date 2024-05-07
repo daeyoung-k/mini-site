@@ -52,6 +52,7 @@ jobs:
           echo output name=image::$ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG
 
       - name: Output check
+        env:
+          STEPS_CHECK: ${{ toJson(steps.admin-build-image) }}
         run: |
-          echo ${{ steps.admin-build-image }}
-          echo ${{ steps.admin-build-image.outputs.image }}
+          echo $steps.admin-build-image

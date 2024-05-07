@@ -52,3 +52,4 @@ jobs:
           echo $ECR_REGISTRY
           echo $ECR_REPO
           echo $IMAGE_TAG
+          echo '라벨체크 오케이'

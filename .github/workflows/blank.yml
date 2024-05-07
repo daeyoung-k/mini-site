@@ -14,26 +14,21 @@ jobs:
 #          distribution: 'temurin'
 
       - if: endsWith(github.head_ref, 'master')
-        env:
-          ENVIRONMENT: prod
-          DESTINATION_CUSTOMER: prod/admin-auth
-        run: echo $GITHUB_ENV
-      - if: endsWith(github.head_ref, 'feature')
-        env:
-          ENVIRONMENT: dev
-          DESTINATION_CUSTOMER: dev/admin-auth
         run: |
-          echo $GITHUB_ENV
-          echo $ENVIRONMENT
-          echo $DESTINATION_CUSTOMER
+          echo "ENVIRONMENT=prod >> $GITHUB_ENV
+          echo "DESTINATION_CUSTOMER=prod/customer-auth" >> $GITHUB_ENV
+      - if: endsWith(github.head_ref, 'feature')
+        run: |
+          echo "ENVIRONMENT=dev >> $GITHUB_ENV
+          echo "DESTINATION_CUSTOMER=dev/customer-auth" >> $GITHUB_ENV
 
       - name: Check PR Labels
 #        env:
 #          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
-          echo "ENVIRONMENT-test=test" >> $GITHUB_ENV
+          echo $ENVIRONMENT
+          echo $DESTINATION_CUSTOMER
           echo $GITHUB_ENV
-          printf( $GITHUB_ENV )
 
 #        run: |
 #          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

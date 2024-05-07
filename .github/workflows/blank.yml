@@ -20,6 +20,6 @@ jobs:
           PU_LABEL_LIST: ${{ toJson(github.event.push.labels.*.name) }}
           LABEL_LIST: ${{ toJson(github.event.push.labels.*) }}
         run: |
-          echo ${{ env.PR_LABEL_LIST }}
-          echo ${{ env.PU_LABEL_LIST }}
-          echo ${{ env.LABEL_LIST }}
+          printf( ${{ env.PR_LABEL_LIST }} )
+          printf( ${{ env.PU_LABEL_LIST }} )
+          printf( ${{ env.LABEL_LIST }} )

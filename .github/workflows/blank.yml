@@ -15,7 +15,7 @@ jobs:
 
       - if: endsWith(github.base_ref, 'master')
         run: |
-          echo "ENVIRONMENT=prod >> $GITHUB_ENV
+          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
           echo "DESTINATION_CUSTOMER=$ENVIRONMENT/customer-auth" >> $GITHUB_ENV
       - if: endsWith(github.base_ref, 'feature')
         run: |

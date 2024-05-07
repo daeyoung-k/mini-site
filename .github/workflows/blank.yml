@@ -49,8 +49,9 @@ jobs:
           ECR_REPO: eks-admin-auth
           IMAGE_TAG: ${{ github.sha }}
         run: |          
-          echo image::$ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG
+          echo output name=image::$ECR_REGISTRY/$ECR_REPO:$ENVIRONMENT-$IMAGE_TAG
 
       - name: Output check
         run: |
+          echo ${{ steps.admin-build-image }}
           echo ${{ steps.admin-build-image.outputs.image }}

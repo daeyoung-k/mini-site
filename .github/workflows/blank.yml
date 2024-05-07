@@ -18,10 +18,10 @@ jobs:
         env:
           PR_LABEL_LIST: ${{ toJson(github.event.pull_request.labels.*.name) }}
           PU_LABEL_LIST: ${{ toJson(github.event.push.labels.*.name) }}
+          LABEL_LIST: ${{ toJson(github.event.push.labels.*) }}
         run: |
           echo ${{ env.PR_LABEL_LIST }}
           echo ${{ env.PU_LABEL_LIST }}
-          echo ${{ github.event.pull_request.labels.* }}
-          echo ${{ github.event.pull_request.labels.*.name }}
+          echo ${{ env.LABEL_LIST }}
           echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
           echo '라벨체크 확인 오케이'

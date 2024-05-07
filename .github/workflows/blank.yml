@@ -15,7 +15,5 @@ jobs:
 
       - name: Check PR Labels
         #if: contains(github.event.pull_request.labels.*.name, 'deploy')
-        env:
-          PR_LABEL_LIST: ${{ toJson(github.event.pull_request.labels.*.name) }}
         run: |
-          ${{ env.PR_LABEL_LIST }} 
+          echo ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}

@@ -9,4 +9,6 @@ jobs:
       - name: Variable
         env:
           CONTEXT: ${{ toJSON(github)}}
-        run: echo $CONTEXT
+        run: |
+          echo $CONTEXT
+          echo "ㅁㄴㅇ"

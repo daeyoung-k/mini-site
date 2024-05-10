@@ -1,8 +1,14 @@
 on:
-  push:
+  pull_request:
     branches: [ master ]
 
 jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        run: echo "Check out code"
+
   deploy:
     runs-on: ubuntu-latest
     steps:

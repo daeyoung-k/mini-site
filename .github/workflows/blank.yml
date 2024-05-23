@@ -10,7 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Variable
-        env:
-          CONTEXT: ${{ toJSON(github)}}
         run: |
-          echo ${{ github.event.pull_request.labels }}
+          echo $GITHUB_OUTPUT

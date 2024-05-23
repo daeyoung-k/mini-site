@@ -13,6 +13,6 @@ jobs:
 #        env:
 #          CONTEXT: ${{ toJSON(github)}}
         run: |
-          echo $(echo ${{ toJSON(github) }} | jq '.event.pull_request.labels | length')
+          echo $(echo toJSON(github) | jq '.event.pull_request.labels | length')
           echo ${{ github.event.pull_request.labels.*.name }}
           echo ${{ contains(github.event.pull_request.labels.*.name, 'bug') }}

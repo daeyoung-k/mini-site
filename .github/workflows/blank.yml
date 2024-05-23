@@ -10,5 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Variable
+        env:
+          CONTEXT: ${{ toJSON(github)}}
         run: |
-          echo $GITHUB_OUTPUT
+          labels_length=$(echo "${CONTEXT}" | jq '.event.pull_request.labels | length')
+          echo $labels_length

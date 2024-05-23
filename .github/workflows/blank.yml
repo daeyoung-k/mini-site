@@ -12,10 +12,7 @@ jobs:
       - name: Variable
         env:
           CONTEXT: ${{ toJSON(github)}}
-        run: |
-          echo LABELS_LENGTH=$(echo $CONTEXT | jq '.event.pull_request.labels | length') >> $GITHUB_ENV
-          echo ${{ github.event.pull_request.labels.*.name }}
-          echo ${{ contains(github.event.pull_request.labels.*.name, 'bug') }}
+        run: echo LABELS_LENGTH=$(echo $CONTEXT | jq '.event.pull_request.labels | length') >> $GITHUB_ENV
 
       - name: length check
         run: |

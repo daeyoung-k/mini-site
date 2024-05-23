@@ -13,4 +13,4 @@ jobs:
         env:
           CONTEXT: ${{ toJSON(github)}}
         run: |
-          echo ${{ github.event.pull_request.labels.*.name }}
+          echo ${{ github.event.pull_request.labels.*.name[@] }}

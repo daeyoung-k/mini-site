@@ -13,5 +13,5 @@ jobs:
         env:
           CONTEXT: ${{ toJSON(github)}}
         run: |
-          labels_length=$(echo "${CONTEXT}" | jq '.event.pull_request.labels | length')
-          echo $labels_length
+          echo $(echo "${CONTEXT}" | jq '.event.pull_request.labels | length')
+          echo ${{ github.event.pull_request.labels.length }}

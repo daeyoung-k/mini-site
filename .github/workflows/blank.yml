@@ -21,7 +21,12 @@ jobs:
         run: |
           echo $LABELS_LENGTH
 
-      - name: if or check
+      - name: if or check deploy
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') || env.LABELS_LENGTH == 0 }}
         run: |
-          echo "admin"
+          echo "deploy"
+
+      - name: if or check bug
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'bug') || env.LABELS_LENGTH == 0 }}
+        run: |
+          echo "bug"

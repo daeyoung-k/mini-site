@@ -9,21 +9,9 @@ jobs:
 #    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Variable
-        env:
-          CONTEXT: ${{ toJSON(github)}}
-        run: echo LABELS_LENGTH=$(echo $CONTEXT | jq '.event.pull_request.labels | length') >> $GITHUB_ENV
-
-      - name: length check
+      - if: contains(fromJson('["master", "feature"]'), github.base_ref)
         run: |
-          echo $LABELS_LENGTH
+          echo $github.base_ref
+          echo "OK"
+      
 
-      - name: if or check deploy
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') || env.LABELS_LENGTH == 0 }}
-        run: |
-          echo "deploy"
-
-      - name: if or check bug
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'bug') || env.LABELS_LENGTH == 0 }}
-        run: |
-          echo "bug"
